@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/home'// 简写方式 相当于 '@/views/home/index.vue' 其中@是/src的别名
-
+import Login from '@/views/login' // 简写方式
 Vue.use(VueRouter)
 
 const routes = [
@@ -13,6 +13,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login// 路由级组件
   }
   // {
   // // 按需加载 访问的时候 才进行js请求 否则不请求

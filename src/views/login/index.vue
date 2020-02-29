@@ -1,7 +1,5 @@
 <template>
-<div>
-    我是主页home
-</div>
+  <div>我是登录页面login</div>
 </template>
 
 <script>
