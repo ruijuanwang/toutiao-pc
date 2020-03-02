@@ -111,6 +111,8 @@ export default {
           method: 'post'
         }).then(result => {
           console.log(result.data)
+          // 把token存到 本地存储 （相当于钥匙放兜里）
+          window.localStorage.setItem('user-token', result.data.data.token)
         }).catch(() => {
           // 失败会进入catch
         })
