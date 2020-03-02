@@ -54,14 +54,24 @@ export default {
     align-items: center;
     width: 100%;
     height: 100vh; // 当前屏幕可视区域分成100份 100vh就是当前屏幕的100%
-    background: url('../../assets/img/login_bg.jpg') no-repeat;
-    background-size: cover;
 
+    //毛玻璃
+    &:before{
+      content:'';
+       position: absolute;
+       width: 100%;
+       height: 100%;
+       background: url('../../assets/img/login_bg2.jpg') no-repeat;
+       background-size: cover;
+       filter: blur(5px)
+
+}
     // 表单
     .login-card{
      position:absolute;
       width: 440px;
       height: 340px;
+      background: rgba(0,0,0,0);
 
     }
     .title{
