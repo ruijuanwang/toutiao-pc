@@ -9,24 +9,27 @@
       <img src="../../assets/img/login_logo.png" alt="">
     </div>
   <!-- 表单容器 el-form -->
-    <el-form >
+  <!-- 绑定:model属性  绑定:rules属性（表单验证规则） -->
+    <el-form :model="loginForm" rules="loginRules">
   <!-- 每一个表单域由form-item组件构成 表单域里面放置 input/select/checkbox -->
        <!-- 表单域-->
-       <el-form-item>
+       <!-- 表单域中 设置 prop属性表示要校验的字段名 -->
+       <el-form-item prop="mobile">
            <!-- 手机号  -->
-           <el-input placeholder="请输入手机号"></el-input>
+           <!-- v-model ： 和data中的数据进行 双向绑定 -->
+           <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
        </el-form-item>
        <!-- 表单域-->
-        <el-form-item>
+        <el-form-item prop="code">
            <!-- 验证码  -->
-           <el-input placeholder="请输入验证码" style="width:60%"></el-input>
+           <el-input v-model="loginForm.code" placeholder="请输入验证码" style="width:60%"></el-input>
            <!-- 按钮 -->
            <el-button  type="primary" style="float:right">发送验证码</el-button>
        </el-form-item>
        <!-- 表单域 -->
-       <el-form-item>
+       <el-form-item prop="checked">
            <!-- 复选框 是否同意协议 -->
-           <el-checkbox>我已阅读并同意用户协议和隐私条款</el-checkbox>
+           <el-checkbox v-model="loginForm.checked">我已阅读并同意用户协议和隐私条款</el-checkbox>
        </el-form-item>
        <!-- 表单域 -->
        <el-form-item>
@@ -40,6 +43,22 @@
 
 <script>
 export default {
+  data () {
+    return {
+      // 1.登录表单数据
+      loginForm: {
+        mobile: '', // 手机号
+        code: '', // 验证码
+        checked: false// 是否同意同户协议
+
+      },
+      // 2.定义表单的验证规则
+      loginRules: {
+
+      }
+
+    }
+  }
 
 }
 </script>
