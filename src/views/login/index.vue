@@ -100,7 +100,20 @@ export default {
       // 第2种方法  promise
       this.$refs.loginForm.validate().then(() => {
         // 如果成功通过 效验就会到达then中
-        console.log('成功')
+        // console.log('成功')
+        // 验证通过 请求登录接口 获取数据 判断手机号是否正常
+        // this.$axios.get/post/delete/put  第一种方式请求接口
+        // 第二种方式请求接口
+        this.$axios({
+          url: '/authorizations', // 请求地址
+          data: this.loginForm, // 直接把这个loginForm对象传过去(包含电话号和验证码) 其中多了checked不影响
+          // data:'{...this.loginForm,checked:null}' // body请求体参数
+          method: 'post'
+        }).then(result => {
+          console.log(result.data)
+        }).catch(() => {
+          // 失败会进入catch
+        })
       })
     }
   }
