@@ -115,6 +115,12 @@ export default {
           window.localStorage.setItem('user-token', result.data.data.token)
         }).catch(() => {
           // 失败会进入catch
+
+          // 提示消息
+          // 第一种用法
+          // this.$message({ message: '用户名或验证码错误', type: 'error' })
+          // 第二种用法
+          this.$message.error('用户名或者验证码错误')
         })
       })
     }
