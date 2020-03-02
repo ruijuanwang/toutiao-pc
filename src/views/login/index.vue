@@ -10,7 +10,7 @@
     </div>
   <!-- 表单容器 el-form -->
   <!-- 绑定:model属性  绑定:rules属性（表单验证规则） -->
-    <el-form :model="loginForm" rules="loginRules">
+    <el-form :model='loginForm' :rules='loginRules'>
   <!-- 每一个表单域由form-item组件构成 表单域里面放置 input/select/checkbox -->
        <!-- 表单域-->
        <!-- 表单域中 设置 prop属性表示要校验的字段名 -->
@@ -54,12 +54,35 @@ export default {
       },
       // 2.定义表单的验证规则
       loginRules: {
+        // required ：如果为true表示该字段必须填
+        mobile: [{
+          required: true, message: '您的手机号不能为空'
+        }, {
+          pattern: /^1[3-9]\d{9}$/, // 正则表达式
+          message: '您的手机号格式不正确' //
+        }],
+        code: [{
+          required: true, message: '您的验证码不能为空'
+        }, {
+          pattern: /^\d{6}$/, // 正则表达式 要求6个数字
+          message: '验证码必须是6位数字'
+        }],
+        checked: [{
+          validator: function (rule, value, callback) {
+            // rule是当前效验的规则
+            // value是当前效验的字段值
+            // callback是一个回调函数 验证成功或者失败都会执行
+            // 成功执行callback 失败执行callback(new Errow('错误信息'))
+            // checked字段中 value为true就表示效验成功 如果value为false则表示效验失败
+            // new Error('错误信息') 就是提示我们当前的错误信息
+            value ? callback() : callback(new Error('请同意此协议'))
+          }
+        }]
 
       }
 
     }
   }
-
 }
 </script>
 
