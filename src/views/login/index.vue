@@ -10,7 +10,8 @@
     </div>
   <!-- 表单容器 el-form -->
   <!-- 绑定:model属性  绑定:rules属性（表单验证规则） -->
-    <el-form :model='loginForm' :rules='loginRules'>
+  <!-- ref(操作dom) 给el-form一个属性 -->
+    <el-form ref="loginForm" :model='loginForm' :rules='loginRules'>
   <!-- 每一个表单域由form-item组件构成 表单域里面放置 input/select/checkbox -->
        <!-- 表单域-->
        <!-- 表单域中 设置 prop属性表示要校验的字段名 -->
@@ -34,7 +35,8 @@
        <!-- 表单域 -->
        <el-form-item>
            <!-- 按钮 -->
-           <el-button  type="primary" style="width:100%">同意</el-button>
+           <!-- 给登录按钮绑定事件 -->
+           <el-button @click="login" type="primary" style="width:100%">登录</el-button>
        </el-form-item>
     </el-form>
       </el-card>
@@ -42,6 +44,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -80,7 +83,25 @@ export default {
         }]
 
       }
-
+    }
+  },
+  methods: {
+    // 3.登录验证
+    login () {
+      // this.$ref.loginForm获取的就是el-form的对象实例
+      // 第1种方法  回调函数 isOk,fiellds(没有通过验证的字段)
+      // this.$refs.loginForm.validate(function (isOk) {
+      //   if (isOk) {
+      //     console.log('效验通过')
+      //   } else {
+      //     console.log('效验未通过')
+      //   }
+      // })
+      // 第2种方法  promise
+      this.$refs.loginForm.validate().then(() => {
+        // 如果成功通过 效验就会到达then中
+        console.log('成功')
+      })
     }
   }
 }
