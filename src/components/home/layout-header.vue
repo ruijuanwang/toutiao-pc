@@ -16,14 +16,15 @@
             <!-- 头像图片 -->
             <img :src='userInfo.photo'>
             <!-- 下拉菜单  用el-dropdown 标签组件  trigger属性：触发下拉的行为 click或hover-->
-            <el-dropdown trigger='click' :hide-on-click="false">
+            <!-- 点击菜单会触发clickMenu事件 -->
+            <el-dropdown @command="clickMenu" trigger='click' :hide-on-click="false">
                    <!-- 昵称 -->
-                   <span class="click">{{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+                   <span  class="click">{{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                 <!-- 下拉内容需要做具名插槽dropdown  el-dropdown-menu是专门做下拉的组件 -->
                 <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>个人信息</el-dropdown-item>
-                <el-dropdown-item>git地址</el-dropdown-item>
-                <el-dropdown-item divided>退出</el-dropdown-item>
+                <el-dropdown-item command='info'>个人信息</el-dropdown-item>
+                <el-dropdown-item command='git'>git地址</el-dropdown-item>
+                <el-dropdown-item divided command='lgout'>退出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
 
@@ -38,6 +39,20 @@ export default {
   data () {
     return {
       userInfo: {} // 用户个人信息
+    }
+  },
+  methods: {
+    clickMenu (command) {
+      // 三种情况
+      if (command === 'info') {
+        // 点击了个人信息
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com/ruijuanwang/toutiao-pc'
+      } else {
+        //   点击了退出 1.删除token 2.跳转登录页
+        window.localStorage.removeItem('user-token')
+        this.$router.push('/login')// 编程式导航 跳回登录页
+      }
     }
   },
   created () {
