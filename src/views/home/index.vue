@@ -1,9 +1,12 @@
 <template>
 <!-- 主页 -->
-<!-- el-container组件是最外层的大容器 -->
+<!-- 最外层放置一个大容器 el-container组件-->
 <el-container>
     <!-- el-aside侧边栏容器 -->
-    <el-aside>左侧导航</el-aside>
+    <el-aside>
+        <!-- 左侧导航组件 -->
+     <layout-aside></layout-aside>
+    </el-aside>
     <!-- 右边在嵌套一个外层的大容器 -->
     <el-container>
         <!-- 再上下布局 -->
@@ -20,7 +23,13 @@
 </template>
 
 <script>
+// 引入左侧导航组件注册并且使用
+import LayoutAside from '@/components/home/layout-aside'
+
 export default {
+  components: {
+    'layout-aside': LayoutAside// 注册左侧导航组件
+  }
 
 }
 </script>
