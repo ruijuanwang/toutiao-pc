@@ -26,15 +26,8 @@
 </template>
 
 <script>
-// 引入左侧导航组件注册并且使用
-import LayoutAside from '@/components/home/layout-aside'
-import LayoutHeader from '@/components/home/layout-header'// 引入头部组件
 
 export default {
-  components: {
-    'layout-aside': LayoutAside, // 注册左侧导航组件
-    'layout-header': LayoutHeader// 注册头部组件
-  }
 
 }
 </script>
