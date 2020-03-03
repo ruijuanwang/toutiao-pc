@@ -14,11 +14,11 @@
          <!-- 再放一个el-row组件 type="flex" 开启flex布局 justify 设置对齐样式 align属性设置垂直对齐方式-->
         <el-row type="flex" justify="end" align="middle">
             <!-- 头像图片 -->
-            <img src='../../assets/img/login_bg.jpg'>
+            <img :src='userInfo.photo'>
             <!-- 下拉菜单  用el-dropdown 标签组件  trigger属性：触发下拉的行为 click或hover-->
             <el-dropdown trigger='click' :hide-on-click="false">
                    <!-- 昵称 -->
-                   <span class="click">胤馨 <i class="el-icon-arrow-down el-icon--right"></i></span>
+                   <span class="click">{{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                 <!-- 下拉内容需要做具名插槽dropdown  el-dropdown-menu是专门做下拉的组件 -->
                 <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>个人信息</el-dropdown-item>
@@ -35,7 +35,24 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      userInfo: {} // 用户个人信息
+    }
+  },
+  created () {
+    var token = window.localStorage.getItem('user-token') // 从缓存中获取token值
+    this.$axios({
+      url: '/user/profile', // 请求地址
+      headers: { // headers:设置请求头参数
+        Authorization: `Bearer ${token}`// 请求格式是Bearer加token
+      }
+    }).then(result => {
+    //   console.log(result.data)
+    // 加载成功 把数据赋值给userInfo
+      this.userInfo = result.data.data
+    })
+  }
 }
 </script>
 
