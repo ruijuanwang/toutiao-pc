@@ -18,7 +18,7 @@
         <el-main>
             主体
             <!-- 这里应该放置二级路由容器 -->
-            <router-view>s</router-view>
+            <router-view></router-view>
         </el-main>
     </el-container>
 </el-container>

@@ -6,9 +6,10 @@
         <img src="../../assets/img/login_logo.png" alt="">
     </div>
     <!--2.导航菜单容器 el-menu  -->
-    <el-menu background-color="#323745" text-color="#adafb5">
+      <!-- 开启路由导航 router="true"(完整模式) router(简写模式)-->
+    <el-menu router background-color="#323745" text-color="#adafb5">
          <!--3. 子菜单无下拉的子菜单 用el-menu-item标签组件  -->
-        <el-menu-item>
+        <el-menu-item index='/home'>
             <i class="el-icon-s-home"></i>
             <span>首页</span>
         </el-menu-item>
@@ -22,10 +23,10 @@
             </template>
             <!-- 4.2 匿名插槽是二级菜单 -->
             <!-- 二级菜单 每一项用el-menu-item标签组件 -->
-            <el-menu-item>发布文章</el-menu-item>
-            <el-menu-item>内容列表</el-menu-item>
-            <el-menu-item>评论列表</el-menu-item>
-            <el-menu-item>素材管理</el-menu-item>
+            <el-menu-item index='/home/publish'>发布文章</el-menu-item>
+            <el-menu-item index='/home/articles'>内容列表</el-menu-item>
+            <el-menu-item index='/home/comment'>评论列表</el-menu-item>
+            <el-menu-item index='/home/material'>素材管理</el-menu-item>
         </el-submenu>
 
         <!-- 粉丝管理 -->
@@ -34,14 +35,14 @@
                <i class="el-icon-star-off"></i>
                <span>粉丝管理</span>
             </template>
-            <el-menu-item>图文数据</el-menu-item>
-            <el-menu-item>粉丝概况</el-menu-item>
-            <el-menu-item>粉丝画像</el-menu-item>
-            <el-menu-item>粉丝列表</el-menu-item>
+            <el-menu-item index='/home/picture'>图文数据</el-menu-item>
+            <el-menu-item index='/home/fansinfo'>粉丝概况</el-menu-item>
+            <el-menu-item index='/home/fansphoto'>粉丝画像</el-menu-item>
+            <el-menu-item index='/home/fanslist'>粉丝列表</el-menu-item>
         </el-submenu>
 
      <!-- 无子菜单 用el-menu-item标签组件  -->
-         <el-menu-item>
+         <el-menu-item index="/home/account">
            <i class="el-icon-s-custom"></i>
            <span>账户信息</span>
          </el-menu-item>
