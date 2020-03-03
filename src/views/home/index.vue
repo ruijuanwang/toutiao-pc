@@ -14,9 +14,8 @@
             <!-- 头部组件 -->
             <layout-header></layout-header>
         </el-header>
-        <!-- 主要区域 -->
-        <el-main>
-            主体
+        <!-- 主要区域 默认加了20px的内边距-->
+        <el-main style="padding: 0">
             <!-- 这里应该放置二级路由容器 -->
             <router-view></router-view>
         </el-main>
