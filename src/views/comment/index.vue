@@ -10,7 +10,8 @@
        <el-table :data="list" stripe style="width: 100%">
         <!-- el-table-column 表格的每一列 label属性定义表格的列名  prop属性代表对象中的键名可填入数据 width属性定义宽度-->
         <el-table-column  prop="title" label="标题" width="600"></el-table-column>
-        <el-table-column  prop="comment_status" label="评论状态"></el-table-column>
+        <!-- 评论状态是布尔值 table不显示布尔值 所以要用一个formatter属性 来格式化内容 -->
+        <el-table-column :formatter='formatterBool'  prop="comment_status" label="评论状态"></el-table-column>
         <el-table-column  prop="total_comment_count" label="总评论数" ></el-table-column>
         <el-table-column  prop="fans_comment_count" label="评论粉丝数" ></el-table-column>
         <el-table-column width="200px"  prop="address" label="操作">
@@ -45,6 +46,15 @@ export default {
         // 数据在 request.data.results 它是个数组
         this.list = request.data.results
       })
+    },
+    // 定义格式化的函数 格式化布尔值 评论状态
+    formatterBool (row, column, cellValue, index) {
+      // row代表当前的一行数据
+      // column代表当前列的信息
+      // cellValue 代表当前单元格的值
+    //   index 代表当前索引
+    // 该函数要返回一个值 用来显示
+      return cellValue ? '正常' : '关闭'
     }
   },
   created () {
