@@ -27,5 +27,16 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(errow)
 })
 
+// 2.3 响应拦截开发
+axios.interceptors.response.use(function (response) {
+  // 成功执行第一个回调
+  // 回调函数的第一个参数 是响应体
+//   在拦截器中需要将数据 返回给浏览器 可以将数据进行结构  response.data.data  真正的数据
+  return response.data ? response.data : {} // 有接口数据 返回data中的数据 没有返回一个空对象（有的接口没有任何响应数据）
+}, function () {
+  // 失败执行第二个回调
+
+})
+
 // 3.导出
 export default axios

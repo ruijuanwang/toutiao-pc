@@ -61,7 +61,7 @@ export default {
     }).then(result => {
     //   console.log(result.data)
     // 加载成功 把数据赋值给userInfo
-      this.userInfo = result.data.data
+      this.userInfo = result.data
     })
   }
 }
