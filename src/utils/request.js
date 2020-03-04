@@ -7,6 +7,7 @@
 
 // 1.先要引入axios
 import axios from 'axios'
+import router from '@/router' // 路由实例对象
 
 // 2.拦截器及其他操作
 // 2.1配置axios的baseURL
@@ -33,9 +34,20 @@ axios.interceptors.response.use(function (response) {
   // 回调函数的第一个参数 是响应体
 //   在拦截器中需要将数据 返回给浏览器 可以将数据进行结构  response.data.data  真正的数据
   return response.data ? response.data : {} // 有接口数据 返回data中的数据 没有返回一个空对象（有的接口没有任何响应数据）
-}, function () {
+}, function (error) {
   // 失败执行第二个回调
-
+// error是错误对象 里面包含了错误的状态码 和 响应的信息
+// 401 状态码 表示用户认证失败 用户身份不对
+// 401出现的时候 表示拿错钥匙/钥匙过期/钥匙没拿/钥匙名不对/钥匙格式不对...
+// 之前的导航守卫 校验有没有token
+// 应该换一个新钥匙 这里使用粗暴方式换钥匙
+// 回登录页之前 应该把钥匙清除掉
+  if (error.response.status === 401) {
+    localStorage.removeItem('user-token') // 删除钥匙
+    router.push('/login') // 直接导入路由对象 使用编程式导航跳转 和组件中的this.$router是一样的
+    // 跳回到登录页
+    // 这里不能使用this.$router.push('/login') 因为this不是组件实例
+  }
 })
 
 // 3.导出
