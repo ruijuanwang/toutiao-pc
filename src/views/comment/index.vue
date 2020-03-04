@@ -9,26 +9,47 @@
     <!-- 3.表格 使用el-table组件 stripe属性可以创建带斑马纹的表格 stripe(简写) stripe:'true'(完整模式)-->
        <el-table :data="list" stripe style="width: 100%">
         <!-- el-table-column 表格的每一列 label属性定义表格的列名  prop属性代表对象中的键名可填入数据 width属性定义宽度-->
-        <el-table-column  prop="date" label="标题" width="600"></el-table-column>
-        <el-table-column  prop="name" label="评论状态"></el-table-column>
-        <el-table-column  prop="address" label="总评论数" ></el-table-column>
-        <el-table-column  prop="address" label="评论粉丝数" ></el-table-column>
-        <el-table-column  prop="address" label="操作"></el-table-column>
+        <el-table-column  prop="title" label="标题" width="600"></el-table-column>
+        <el-table-column  prop="comment_status" label="评论状态"></el-table-column>
+        <el-table-column  prop="total_comment_count" label="总评论数" ></el-table-column>
+        <el-table-column  prop="fans_comment_count" label="评论粉丝数" ></el-table-column>
+        <el-table-column width="200px"  prop="address" label="操作">
+            <el-button type="text" size='small' icon="el-icon-edit-outline">修改</el-button>
+            <el-button type="text" size='small' icon="el-icon-document">打开评论</el-button>
+        </el-table-column>
 
     </el-table>
  </el-card>
 </template>
 
 <script>
+
 export default {
   data () {
     return {
-      list: [
-        // { date: '1', name: '张三', address: '1212' },
-        // { date: '1', name: '张三', address: '1212' },
-        // { date: '1', name: '张三', address: '1212' } 假数据 为了测试
-      ]
+      list: []
     }
+  },
+  methods: {
+    //   获取评论列表 调用接口 请求数据 渲染页面
+    getComment () {
+      this.$axios({
+        url: '/articles',
+        params: {
+          response_type: 'comment'// 此参数用来控制获取数据类型
+        }
+        // query参数应该在哪个位置传 axios
+        // params 传get参数也就是query参数
+        // data   传body参数也就是请求体参数
+      }).then(request => {
+        // 数据在 request.data.results 它是个数组
+        this.list = request.data.results
+      })
+    }
+  },
+  created () {
+    //   在钩子函数中 直接获取数据
+    this.getComment()
   }
 
 }
