@@ -56,12 +56,8 @@ export default {
     }
   },
   created () {
-    var token = window.localStorage.getItem('user-token') // 从缓存中获取token值
     this.$axios({
-      url: '/user/profile', // 请求地址
-      headers: { // headers:设置请求头参数
-        Authorization: `Bearer ${token}`// 请求格式是Bearer加token
-      }
+      url: '/user/profile' // 请求地址
     }).then(result => {
     //   console.log(result.data)
     // 加载成功 把数据赋值给userInfo
