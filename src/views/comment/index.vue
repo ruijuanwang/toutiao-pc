@@ -2,8 +2,9 @@
    <!-- 评论列表导航组件 -->
    <!--1. 用card 做 主页面 -->
  <el-card>
-     <!-- 2.面包屑组件 具名插槽 name='title' 作为card的头部标题显示-->
-     <bread-crumb>
+     <!-- 具名插槽 slot="header" 给了el-card(给卡片组件填坑) 作为card的头部标题显示-->
+     <bread-crumb slot="header">
+      <!-- 2.面包屑组件 具名插槽  slot="title" 给了bread-crumb(给面包屑组件填坑) -->
      <template slot="title">评论列表</template>
      </bread-crumb>
     <!-- 3.表格 使用el-table组件 stripe属性可以创建带斑马纹的表格 stripe(简写) stripe:'true'(完整模式)-->
