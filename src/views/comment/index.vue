@@ -20,7 +20,8 @@
              <template slot-scope="obj">
             <el-button type="text" size='small' icon="el-icon-edit-outline">修改</el-button>
             <!-- 打开或者关闭评论 根据评论状态来决定 通过作用域插槽获取row的数据 -->
-            <el-button type="text" size='small' icon="el-icon-document">{{obj.row.comment_status?'关闭':'打开'}}评论</el-button>
+             <!-- @click="openOrClose(obj.row) 给按钮绑定事件 并且要传一个参数过去 obj.row表示点击的当前行-->
+            <el-button @click="openOrClose(obj.row)" type="text" size='small' icon="el-icon-document">{{obj.row.comment_status?'关闭':'打开'}}评论</el-button>
             </template>
         </el-table-column>
 
@@ -61,6 +62,35 @@ export default {
     //   index 代表当前索引
     // 该函数要返回一个值 用来显示
       return cellValue ? '正常' : '关闭'
+    },
+    // 打开或者关闭评论的方法  row接收参数 当前被点击的行数据
+    openOrClose (row) {
+      var mess = row.comment_status ? '关闭' : '打开'
+      //   友好提示  $confirm 方法支持promise 用户点击确定会进入then  点击取消会进入catch
+      this.$confirm(`确定${mess}评论吗`, '提示', { type: 'warning' }).then(() => {
+        //   提示弹框中点击确定 进入then方法 调用接口
+        this.$axios({
+          url: '/comments/status', // 地址
+          method: 'put', // 请求类型
+          //   query参数
+          params: {
+            article_id: row.id // 要求传入参数 文章id
+          },
+          data: {
+            // body参数
+            allow_comment: !row.comment_status // 打开或者关闭 和评论状态相反
+          }
+        }).then(() => {
+          // 请求成功 进入then
+        //   提示 打开或关闭评论 然后重新拉取数据
+          this.$message.success(`${mess}评论成功`)
+          //   重新拉取数据
+          this.getComment() // 调用重新 获取评论列表数据的 方法
+        }).catch(() => {
+          // 请求失败 进入catch
+          this.$message.error(`${mess}评论失败`)
+        })
+      })
     }
 
   },
