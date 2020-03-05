@@ -3,7 +3,7 @@
 <!-- 最外层放置一个大容器 el-container组件-->
 <el-container>
     <!-- el-aside侧边栏容器 -->
-    <el-aside style="width:230px">
+    <el-aside style="width:230px; background-color:#2e2f32">
         <!-- 左侧导航组件 -->
      <layout-aside></layout-aside>
     </el-aside>

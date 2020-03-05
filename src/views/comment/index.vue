@@ -15,8 +15,13 @@
         <el-table-column  prop="total_comment_count" label="总评论数" ></el-table-column>
         <el-table-column  prop="fans_comment_count" label="评论粉丝数" ></el-table-column>
         <el-table-column width="200px"  prop="address" label="操作">
+            <!-- el-table-column 组件 在插槽中传出了 row $index store column -->
+            <!-- 作用域插槽 通过slot-scope来接收 row行数据 $index是索引 -->
+             <template slot-scope="obj">
             <el-button type="text" size='small' icon="el-icon-edit-outline">修改</el-button>
-            <el-button type="text" size='small' icon="el-icon-document">打开评论</el-button>
+            <!-- 打开或者关闭评论 根据评论状态来决定 通过作用域插槽获取row的数据 -->
+            <el-button type="text" size='small' icon="el-icon-document">{{obj.row.comment_status?'关闭':'打开'}}评论</el-button>
+            </template>
         </el-table-column>
 
     </el-table>
@@ -29,6 +34,7 @@ export default {
   data () {
     return {
       list: []
+
     }
   },
   methods: {
@@ -56,6 +62,7 @@ export default {
     // 该函数要返回一个值 用来显示
       return cellValue ? '正常' : '关闭'
     }
+
   },
   created () {
     //   在钩子函数中 直接获取数据
