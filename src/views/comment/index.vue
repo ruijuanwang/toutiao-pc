@@ -8,7 +8,10 @@
      <template slot="title">评论列表</template>
      </bread-crumb>
     <!-- 3.表格 使用el-table组件 stripe属性可以创建带斑马纹的表格 stripe(简写) stripe:'true'(完整模式)-->
-       <el-table :data="list" stripe style="width: 100%">
+     <!-- v-loading指令的元素值为布尔值 当请求数据前让它显示遮罩层 设置true 数据请求回来 设置false -->
+       <el-table :data="list" stripe style="width: 100%"
+       v-loading="loading" element-loading-text="拼命加载中"
+       element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.6)">
         <!-- el-table-column 表格的每一列 label属性定义表格的列名  prop属性代表对象中的键名可填入数据 width属性定义宽度-->
         <el-table-column  prop="title" label="标题" width="600"></el-table-column>
         <!-- 评论状态是布尔值 table不显示布尔值 所以要用一个formatter属性 来格式化内容 -->
@@ -58,13 +61,16 @@ export default {
         total: 0, // 总页数默认0
         currentPage: 1, // 当前页默认1
         pageSize: 10 // 每页显示多少条 默认10
-      }
+      },
+      loading: false // 控制loading遮罩层的显示或者隐藏 默认false
 
     }
   },
   methods: {
     //   获取评论列表 调用接口 请求数据 渲染页面
     getComment () {
+      this.loading = true // 打开遮罩层
+
       this.$axios({
         url: '/articles',
         params: {
@@ -81,6 +87,7 @@ export default {
         this.list = request.data.results
         // 请求来的总页数 给 data中的总页数total
         this.page.total = request.data.total_count
+        this.loading = false// 数据请求回来 关闭遮罩层
       })
     },
     // 定义格式化的函数 格式化布尔值 评论状态
