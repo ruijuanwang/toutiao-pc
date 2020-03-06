@@ -27,6 +27,23 @@
         </el-table-column>
 
     </el-table>
+    <!-- 放置分页组件 使用el-row来布局
+    分页组件： el-pagination -->
+    <el-row type="flex" justify="center" align="middle" style="height:60px">
+      <!-- background 是否为分页按钮添加背景色  :total总页数
+      分页组件需要动态的数据
+      total 当前总页数
+      current-page 当前的页码
+      page-size 每页显示多少条
+      监听current-change事件
+      -->
+      <el-pagination  background layout="prev, pager, next"
+      :total="page.total"
+      :current-page ='page.currentPage'
+      :page-size='page.pageSize'
+      @current-change="chagePage">
+      </el-pagination>
+  </el-row>
  </el-card>
 </template>
 
@@ -35,7 +52,13 @@
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      // 分页动态参数 放一个page对象 数据更清晰
+      page: {
+        total: 0, // 总页数默认0
+        currentPage: 1, // 当前页默认1
+        pageSize: 10 // 每页显示多少条 默认10
+      }
 
     }
   },
@@ -45,7 +68,10 @@ export default {
       this.$axios({
         url: '/articles',
         params: {
-          response_type: 'comment'// 此参数用来控制获取数据类型
+          response_type: 'comment', // 此参数用来控制获取数据类型
+          per_page: this.pageSize, // 每次请求几条 默认10条
+          page: this.page.currentPage // 查对应码 请求第几页
+
         }
         // query参数应该在哪个位置传 axios
         // params 传get参数也就是query参数
@@ -53,6 +79,8 @@ export default {
       }).then(request => {
         // 数据在 request.data.results 它是个数组
         this.list = request.data.results
+        // 请求来的总页数 给 data中的总页数total
+        this.page.total = request.data.total_count
       })
     },
     // 定义格式化的函数 格式化布尔值 评论状态
@@ -96,6 +124,13 @@ export default {
           this.$message.error(`${mess}评论失败`)
         })
       })
+    },
+    // 分页点击页码发生变化事件
+    chagePage (newPage) {
+      // currentPage 参数是当前点击的最新页数
+      // 当我点击的时候 把最新的页码给data数据中 重新调用接口 获取当前点击页的数据
+      this.page.currentPage = newPage // 点击的最新页码给到  data数据中的 当前页
+      this.getComment() // 重新获取数据  调用接口 (获取评论)
     }
 
   },
