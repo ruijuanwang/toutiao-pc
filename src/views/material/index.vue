@@ -8,6 +8,13 @@
     <!-- 面包屑组件 具名插槽 -->
     <template slot="title">素材管理</template>
   </bread-crumb>
+  <!-- 上传图片el-upload 组件  使用row控制位置 -->
+  <el-row type="flex" justify="end">
+    <!-- action 必选的参数 上传的地址 可给空字符串 不写会报错  show-file-list 是否显示已上传文件列表 -->
+     <el-upload :http-request="uploadImg" :show-file-list="false"  action=''>
+       <el-button  size="small" type="primary">上传图片</el-button>
+     </el-upload>
+  </el-row>
   <!-- tab标签组件 tab-click  -->
  <!--  v-model="activeName" 绑定的值，就是所激活的页签  选项卡的 name -->
   <el-tabs @tab-click='changeTab' v-model="activeName" type="boder-card">
@@ -102,9 +109,33 @@ export default {
     },
     // 页码发生改变
     chagePage (newPage) {
+      // newPage 参数 是当前点击的页码
       this.page.currentPage = newPage // 新的页码数赋值给data中的变量
       this.getMaterial() // 重新拉取数据 渲染页面
+    },
+    // 上传图片组件的方法
+    uploadImg (params) {
+      // console.log(params)
+      // params 是一个对象 当前图片的所有信息 params.file 就是要上传的图片文件
+      // 调用上传图片的接口 类型是 formdata类型
+      var data = new FormData() // 实例化一个formdata对象
+      data.append('image', params.file) // 加入文件参数
+      // 发送上传请求
+      this.$axios({
+        url: '/user/images', // 请求地址
+        method: 'post', // 请求类型post
+        data // es6简写 相当于 data:data
+
+      }).then(() => {
+        // 上传成功 重新拉取数据 渲染页面
+        this.getMaterial()
+        this.$message.success('上传素材成功')
+      }).catch(() => {
+        // 失败
+        this.$message.error('上传素材失败')
+      })
     }
+
   },
   created () {
     // 实例化之后 调用接口 获取素材管理数据
