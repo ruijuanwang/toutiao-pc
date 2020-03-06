@@ -18,7 +18,13 @@
           <el-card v-for="item in list" :key="item.id" class="img-card">
             <!-- 放置图片 赋值图片地址 -->
             <img :src="item.url" alt="">
+           <!-- 操作栏 收藏删除图标显示 使用el-row 可用flex布局 -->
+          <el-row class="operate" type="flex" justify="space-around" align="middle">
+              <i class="el-icon-star-off"></i>
+              <i class="el-icon-delete"></i>
+          </el-row>
           </el-card>
+
           </div>
             </el-tab-pane>
     <el-tab-pane label="收藏" name="collect">收藏素材图片</el-tab-pane>
@@ -72,8 +78,11 @@ export default {
      height: 240px;
      margin-bottom: 20px;
       img{
-        width: 100%;
-        height: 100%;
+        width: 200px;
+        height: 170px;
+      }
+      .operate{
+        height: 30px;
       }
 }
 }
