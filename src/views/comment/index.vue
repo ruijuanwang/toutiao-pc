@@ -66,7 +66,7 @@ export default {
     },
     // 打开或者关闭评论的方法  row接收参数 当前被点击的行数据
     openOrClose (row) {
-      var mess = row.comment_status ? '关闭' : '打开'
+      const mess = row.comment_status ? '关闭' : '打开'
       //   友好提示  $confirm 方法支持promise 用户点击确定会进入then  点击取消会进入catch
       this.$confirm(`确定${mess}评论吗`, '提示', { type: 'warning' }).then(() => {
         //   提示弹框中点击确定 进入then方法 调用接口
@@ -75,7 +75,11 @@ export default {
           method: 'put', // 请求类型
           //   query参数
           params: {
-            article_id: row.id // 要求传入参数 文章id
+            //   为什么 评论列表打开或者关闭失败  因为原来后端传的 id 前端再次传过去 id发生了变化
+            // 所以我们用大数字包 保证id不被转化 就可以使用原来的功能
+            article_id: row.id.toString()// 要求传入参数 文章id  BigNumber 类型转化成字符串
+            // 前端传的字符串 到后端只要和原数字一致 后端自动将字符串转换成大数字
+            // 只要保证id和传过来的id一致就行
           },
           data: {
             // body参数
