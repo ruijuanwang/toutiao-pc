@@ -26,8 +26,20 @@
           </el-card>
 
           </div>
-            </el-tab-pane>
-    <el-tab-pane label="收藏" name="collect">收藏素材图片</el-tab-pane>
+   </el-tab-pane>
+            <!-- 收藏图片显示 -->
+    <el-tab-pane label="收藏" name="collect">
+        <!--收藏 素材图片 -->
+          <div class="img-list">
+            <!-- 素材图片显示 循环list数据-->
+          <el-card v-for="item in list" :key="item.id" class="img-card">
+            <!-- 放置图片 赋值图片地址 -->
+            <img :src="item.url" alt="">
+           <!-- 操作栏 收藏删除图标显示 使用el-row 可用flex布局 -->
+          </el-card>
+
+          </div>
+    </el-tab-pane>
   </el-tabs>
 
   </el-card>
@@ -47,7 +59,8 @@ export default {
       this.$axios({
         url: '/user/images', // 地址
         params: { // get参数 == query参数
-          collect: false // 请求参数 是否是收藏图片
+          // collect: false // 请求参数 是否是收藏图片 true 代表获取收藏图片 false代表获取全部图片
+          collect: this.activeName === 'collect' // 这个位置应该变活 根据当前的页签变活   activeName === 'all' 获取所有的素材  activeName = 'collect' 获取收藏素材
         }
       }).then(request => {
       // 请求数据成功
@@ -58,7 +71,9 @@ export default {
     },
     // 切换tab事件
     changeTab () {
-
+      // 发生改变的时候 可以根据当前 activeName来决定是获取哪个方面 的数据 重新调用接口
+    // activeName === 'all' 获取所有的素材  activeName = 'collect' 获取收藏素材
+      this.getMaterial()// 调用获取素材的方法
     }
   },
   created () {
