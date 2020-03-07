@@ -38,16 +38,21 @@
 </el-form>
 <!-- 文章主体结构 -->
 <el-row type="flex" align="middle" class="total">共找到100条符合条件的数据</el-row>
-<!--列表内容 article-item 作为一个循环项 -->
- <div class="article-item" v-for="item  in 100" :key="item">
+<!--列表内容 article-item 作为一个循环项   item.id是个大数字对象 -->
+ <div class="article-item" v-for="item  in list" :key="item.id.toString()">
     <!-- 左侧显示 -->
     <div class="left">
-    <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3997963333,2204040841&fm=15&gp=0.jpg" alt="">
+        <!-- 用变量的形式赋值 有图片就用原图片 没有就使用默认图片 -->
+    <img :src="item.cover.length?item.cover.images[0]:defaultImg" alt="">
     <div class="info">
-        <span>哈哈哈</span>
+        <!-- 文章标题 -->
+        <span>{{item.title}}</span>
         <!-- el-tag 组件标签 -->
-         <el-tag class='tag'>已发表</el-tag>
-        <span class="date">2020-03-07 19:37:25</span>
+          <!--   文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败 -->
+      <!-- 只是改变显示的格式 可以用过滤器   两个过滤器 分别处理   显示文本 和 标签类型-->
+         <el-tag :type="item.status | filterType" class='tag'>{{item.status | filterStatus }}</el-tag>
+         <!-- 发表日期 -->
+        <span class="date">{{item.pubdate}}</span>
     </div>
     </div>
     <!-- 右侧显示 -->
@@ -71,7 +76,9 @@ export default {
         dateRange: []// 日期范围
 
       },
-      channels: []// 频道列表数据
+      channels: [], // 接收频道列表数据
+      list: [], // 接收文章内容列表数据
+      defaultImg: require('@/assets/img/login_bg.jpg') // 地址对应的文件变成了变量 编译时会拷贝到对应的位置
 
     }
   },
@@ -81,15 +88,61 @@ export default {
       // 发送请求
       this.$axios({
         url: '/channels' // 请求地址
-      }).then((reslut) => {
+      }).then((result) => {
       // 成功
-        this.channels = reslut.data.channels// 把接口返回的数据赋值给数组
+        this.channels = result.data.channels// 把接口返回的数据赋值给数组
+      })
+    },
+    // 获取内容列表数据 方法
+    getArticles () {
+      // 发送请求
+      this.$axios({
+        url: '/articles' // 请求地址
+      }).then((result) => {
+        // 成功
+        this.list = result.data.results // 把接口返回的数据赋值给数组
       })
     }
+
+  },
+  // 过滤器 处理文章状态显示格式
+  //   过滤器要有返回值
+  filters: {
+    filterStatus (value) {
+      // 过滤器的第一个参数是管道前面的值
+    //   文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败
+    //   根据不同的数字判断显示的状态
+      switch (value) {
+        case 0 :
+          return '草稿'
+        case 1 :
+          return '待审核'
+        case 2 :
+          return '已发表' // 审核通过
+        case 3 :
+          return '审核失败'
+      }
+    },
+    // 过滤器除了用在 插值表达式中 还可用在 v-bind 的表达式中
+    filterType (value) {
+      //  根据当前状态的值 显示不同类型的tag标签
+      switch (value) {
+        case 0 :
+          return 'warning'
+        case 1 :
+          return 'info' // 待审核
+        case 2 :
+          return '' // 审核通过 空 默认蓝色
+        case 3 :
+          return 'danger' // 审核失败
+      }
+    }
+
   },
 
   created () {
     this.getChannels() // 获取频道列表数据
+    this.getArticles() // 获取内容列表数据
   }
 
 }

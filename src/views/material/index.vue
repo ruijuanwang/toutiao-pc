@@ -111,7 +111,7 @@ export default {
         }
       }).then(request => {
       // 请求数据成功
-        console.log(request)
+        // console.log(request)
         //  request.data.results 是个数组 把这个数组给data中的变量
         this.list = request.data.results
         this.page.total = request.data.total_count // 强求回来的总页码给当前data中的变量
