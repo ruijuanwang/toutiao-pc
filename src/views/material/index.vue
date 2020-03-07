@@ -22,9 +22,9 @@
           <!--全部 素材图片 -->
           <div class="img-list">
             <!-- 素材图片显示 循环list数据-->
-          <el-card v-for="item in list" :key="item.id" class="img-card" >
-            <!-- 放置图片 赋值图片地址 -->
-            <img :src="item.url" alt="">
+          <el-card v-for="(item,index) in list" :key="item.id" class="img-card" >
+            <!-- 放置图片 赋值图片地址  selectImg给图片绑定事件 显示大图-->
+            <img @click="selectImg(index)" :src="item.url" alt="">
            <!-- 操作栏 收藏删除图标显示 使用el-row 可用flex布局 -->
           <el-row class="operate" type="flex" justify="space-around" align="middle">
              <!-- is_collected 返回来的属性 true代表 收藏的素材 false代表全部素材 判断 -->
@@ -41,9 +41,9 @@
         <!--收藏 素材图片 -->
           <div class="img-list">
             <!-- 素材图片显示 循环list数据-->
-          <el-card v-for="item in list" :key="item.id" class="img-card-love">
-            <!-- 放置图片 赋值图片地址 -->
-            <img :src="item.url" alt="">
+          <el-card v-for="(item,index) in list" :key="item.id" class="img-card-love">
+            <!-- 放置图片 赋值图片地址  selectImg给图片绑定事件 并且传入当前图片的index索引 显示大图-->
+            <img @click="selectImg(index)" :src="item.url" alt="">
            <!-- 操作栏 收藏删除图标显示 使用el-row 可用flex布局 -->
           </el-card>
 
@@ -66,6 +66,17 @@
        @current-change="chagePage">
       </el-pagination>
   </el-row>
+ <!--  el-dialog（懒加载） 组件 弹出一个对话框 用来做走马灯效果的 visible属性的值是布尔值 用来显示对话框的显示和隐藏 -->
+ <!-- 定义变量dialogVisible: 用来控制显示或者隐藏 -->
+  <el-dialog @opened='openEnd' :visible="dialogVisible"  @close="dialogVisible = false">
+    <!-- 放置走马灯组件 ref可以获取组件对象-->
+     <el-carousel ref="myCarousel" indicator-position="outside">
+          <!-- 放置幻灯片循环项 -->
+        <el-carousel-item v-for="item in list" :key="item.id" >
+          <img :src="item.url" style="width:100%;height:100%" alt="">
+        </el-carousel-item>
+     </el-carousel>
+  </el-dialog>
   </el-card>
 </template>
 
@@ -80,7 +91,11 @@ export default {
         currentPage: 1, // 当前页 默认1
         pageSize: 8, // 每页显示数量  默认4张
         total: 0// 总页数
-      }
+      },
+      // 幻灯片走马灯
+      dialogVisible: false, // 默认false 不显示 当我点击图片的时候才显示
+      clickIndex: -1 // 点击图片的索引
+
     }
   },
   methods: {
@@ -174,6 +189,16 @@ export default {
           this.$message.error('删除失败!')
         })
       })
+    },
+    // 点击图片事件 显示大图
+    selectImg (index) {
+      // index 当前点击图片的索引
+      this.dialogVisible = true // 点击图片显示
+      this.clickIndex = index // 将索引赋值
+    },
+    openEnd () {
+      // 这个时候 是渲染完毕了 打开结束了 ref有值 可以通过ref进行设置了
+      this.$refs.myCarousel.setActiveItem(this.clickIndex)
     }
 
   },
@@ -216,6 +241,7 @@ export default {
         }
       }
 }
+
 }
 
 </style>
