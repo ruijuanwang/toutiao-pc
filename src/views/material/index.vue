@@ -41,7 +41,7 @@
         <!--收藏 素材图片 -->
           <div class="img-list">
             <!-- 素材图片显示 循环list数据-->
-          <el-card v-for="item in list" :key="item.id" class="img-card">
+          <el-card v-for="item in list" :key="item.id" class="img-card-love">
             <!-- 放置图片 赋值图片地址 -->
             <img :src="item.url" alt="">
            <!-- 操作栏 收藏删除图标显示 使用el-row 可用flex布局 -->
@@ -189,14 +189,20 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content:space-around;
+  .img-card-love{
+    background-color: rgba(250, 182, 246, 0.3);
+    margin-bottom: 20px;
+      img{
+        width: 200px;
+        height: 170px;
+      }
+  }
   .img-card{
     background: rgba(181, 171, 241, 0.3);
-     width: 220px;
      height: 240px;
      margin-bottom: 20px;
 
       img{
-        margin-left: -10px;
         width: 200px;
         height: 170px;
       }
