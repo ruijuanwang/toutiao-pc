@@ -22,13 +22,15 @@
           <!--全部 素材图片 -->
           <div class="img-list">
             <!-- 素材图片显示 循环list数据-->
-          <el-card v-for="item in list" :key="item.id" class="img-card">
+          <el-card v-for="item in list" :key="item.id" class="img-card" >
             <!-- 放置图片 赋值图片地址 -->
             <img :src="item.url" alt="">
            <!-- 操作栏 收藏删除图标显示 使用el-row 可用flex布局 -->
           <el-row class="operate" type="flex" justify="space-around" align="middle">
-              <i class="el-icon-star-off"></i>
-              <i class="el-icon-delete"></i>
+             <!-- is_collected 返回来的属性 true代表 收藏的素材 false代表全部素材 判断 -->
+             <!-- 两个图标绑定点击事件 传值 -->
+              <i @click='collectOrCancel(item)' :style="{color: item.is_collected ? 'red' : 'black'}" class="el-icon-star-on"></i>
+              <i @click='delMaterial(item)' class="el-icon-delete-solid"></i>
           </el-row>
           </el-card>
 
@@ -134,6 +136,44 @@ export default {
         // 失败
         this.$message.error('上传素材失败')
       })
+    },
+    // 收藏或取消收藏素材方法
+    collectOrCancel (row) {
+      // item 是个对象 当前素材的信息
+      this.$axios({
+        url: `/user/images/${row.id}`, // 请求地址 需要拼接当前的id
+        method: 'put', // 请求类型
+        data: { // 放置body参数
+          collect: !row.is_collected // 请求传的值要取反 is_collected 是布尔值 收藏是true 取消收藏false
+        }
+      }).then(() => {
+        // 成功
+        var mess = row.is_collected ? '取消' : '收藏'
+        this.getMaterial() // 重新拉取数据
+        this.$message.success(`${mess}成功!`)
+      }).catch(() => {
+        this.$message.error('操作失败!')
+      })
+    },
+    // 删除素材
+    delMaterial (row) {
+      // 友好提示
+      this.$confirm('您确定要删除吗？').then(() => { // 支持promise
+      //  如果 确定删除  直接调用删除接口
+        this.$axios({
+          url: `/user/images/${row.id}`, // 请求地址 需要拼接当前的id
+          method: 'delete', // 请求类型
+          data: { // 放置body参数
+            collect: !row.is_collected // 请求传的值要取反 is_collected 是布尔值 收藏是true 取消收藏false
+          }
+        }).then(() => {
+        // 成功
+          this.getMaterial() // 重新拉取数据
+          this.$message.success('删除成功!')
+        }).catch(() => {
+          this.$message.error('删除失败!')
+        })
+      })
     }
 
   },
@@ -150,15 +190,24 @@ export default {
   flex-wrap: wrap;
   justify-content:space-around;
   .img-card{
+    background: rgba(181, 171, 241, 0.3);
      width: 220px;
      height: 240px;
      margin-bottom: 20px;
+
       img{
+        margin-left: -10px;
         width: 200px;
         height: 170px;
       }
       .operate{
+        box-sizing: border-box;
         height: 30px;
+        font-size: 25px;
+        padding-top: 10px;
+        i{
+          cursor: pointer;
+        }
       }
 }
 }
