@@ -36,6 +36,26 @@
         <el-date-picker type="daterange" v-model="searchForm.dateRange"></el-date-picker>
     </el-form-item>
 </el-form>
+<!-- 文章主体结构 -->
+<el-row type="flex" align="middle" class="total">共找到100条符合条件的数据</el-row>
+<!--列表内容 article-item 作为一个循环项 -->
+ <div class="article-item" v-for="item  in 100" :key="item">
+    <!-- 左侧显示 -->
+    <div class="left">
+    <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3997963333,2204040841&fm=15&gp=0.jpg" alt="">
+    <div class="info">
+        <span>哈哈哈</span>
+        <!-- el-tag 组件标签 -->
+         <el-tag class='tag'>已发表</el-tag>
+        <span class="date">2020-03-07 19:37:25</span>
+    </div>
+    </div>
+    <!-- 右侧显示 -->
+    <div class="right">
+        <span><i class="el-icon-edit"></i>修改</span>
+        <span><i class="el-icon-delete"></i>删除</span>
+    </div>
+</div>
 </el-card>
 </template>
 
@@ -75,6 +95,45 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang='less' scoped>
+.total{
+    height: 60px;
+    border-bottom: 1px dashed #ccc;
+}
+.article-item{
+    padding: 20px  0;
+    display: flex;
+    justify-content:space-between;
+    align-content:center;
+    border-bottom: 1px solid #ccc;
+    .left{
+        display: flex;
+        .info{
+           display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            .date{
+                clear: #999;
+                font-size: 12px;
+            }
+            .tag{
+                width: 60px;
+                text-align: center;
+            }
+        }
+        img{
+            width: 180px;
+            height: 100px;
+            margin-right: 20px;
+        }
+    }
+   .right{
+        span {
+             font-size: 12px;
+             margin-right: 8px;
+             cursor: pointer;
+             user-select: none;
+           }
+}
+   }
 </style>
