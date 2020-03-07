@@ -27,6 +27,10 @@ const routes = [
     {
       path: '/home/material', // 素材管理地址 完整地址  'material' (简写地址)
       component: () => import('@/views/material') // 按需加载
+    },
+    {
+      path: 'articles', // 内容列表 简写地址
+      component: () => import('@/views/articles') // 引入组件 按需加载
     }
     ]
   },
