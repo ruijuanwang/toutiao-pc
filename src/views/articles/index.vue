@@ -13,7 +13,9 @@
         <!-- 单选框组 -->
         <!-- 文章状态  label是当前v-model绑定的值-->
         <!-- 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，将5定义为全部 -->
-        <el-radio-group @change="changeCondition" v-model="searchForm.status">
+        <!-- 第一种 监听值改变的方式 实现筛选功能 -->
+        <!-- <el-radio-group @change="changeCondition" v-model="searchForm.status"> -->
+        <el-radio-group v-model="searchForm.status">
               <el-radio :label="5">全部</el-radio>
               <el-radio :label="0">草稿</el-radio>
               <el-radio :label="1">待审核</el-radio>
@@ -24,7 +26,9 @@
     <!-- 通过频道接口获取数据 -->
     <el-form-item  label="频道列表：">
         <!-- 频道列表 el-select组件-->
-    <el-select @change="changeCondition" v-model="searchForm.channel_id" placeholder="请选择">
+        <!-- 第一种 监听值改变的方式 实现筛选功能 -->
+    <!-- <el-select @change="changeCondition" v-model="searchForm.channel_id" placeholder="请选择"> -->
+    <el-select v-model="searchForm.channel_id" placeholder="请选择">
         <!-- 循环生成el-option下拉选项 :label是显示值 :value是绑定的当前项-->
     <el-option v-for="item in channels" :label="item.name" :value="item.id" :key="item.id">
  </el-option>
@@ -34,7 +38,9 @@
         <!-- 时间选择 -->
         <!-- 日期范围选择组件  要设置type属性为 daterange-->
         <!-- 显示值和存储值的结构不一致 使用value-format指定绑定值的格式。 -->
-        <el-date-picker value-format="yyyy-MM-dd" @change="changeCondition" type="daterange" v-model="searchForm.dateRange"></el-date-picker>
+        <!-- 第一种 监听值改变的方式 实现筛选功能 -->
+        <!-- <el-date-picker value-format="yyyy-MM-dd" @change="changeCondition" type="daterange" v-model="searchForm.dateRange"></el-date-picker> -->
+        <el-date-picker value-format="yyyy-MM-dd" type="daterange" v-model="searchForm.dateRange"></el-date-picker>
     </el-form-item>
 </el-form>
 <!-- 文章主体结构 -->
@@ -158,6 +164,18 @@ export default {
   created () {
     this.getChannels() // 获取频道列表数据
     this.getArticles() // 获取内容列表数据
+  },
+  // 监听data中的数据 监听谁写谁的名字
+  // watch还可以监听 一个 对象
+  // 监听表单对象 searchForm数据的方法  筛选第二种方案(深度检测方案)
+  watch: {
+    searchForm: {
+      deep: true, // 固定写法 深度监听
+      handler () { // handler固定写法 监听的数据一旦发生变化 就会执行这个函数
+      // 调用 统一改变条件的方法 调用接口
+        this.changeCondition() // this指向组件实例
+      }
+    }
   }
 
 }
