@@ -26,7 +26,11 @@
 </el-form-item>
 <el-form-item label="频道：">
     <!-- 下拉菜单 用 select选择器 -->
-    <el-select></el-select>
+    <!-- v-model的值为当前被选中的el-option的 value 属性值 -->
+    <el-select placeholder="请选择频道">
+        <!-- 下拉菜单 用v-for循环生成el-option  label 显示值  value 保存值 -->
+        <el-option v-for="item in channels" :label="item.name" :value="item.id" :key="item.id" ></el-option>
+    </el-select>
 </el-form-item>
 <el-form-item>
     <!-- 两个按钮  -->
@@ -39,7 +43,25 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      channels: [] // 接收频道数据 为什么用数组接收 因为接口取过来的是个数组 里面的每一项是个对象
+    }
+  },
+  methods: {
+    // 获取文章频道 方法
+    getChannels () {
+      // 调用接口
+      this.$axios({
+        url: '/channels' // 接口地址
+      }).then((result) => {
+        this.channels = result.data.channels
+      })
+    }
+  },
+  created () {
+    this.getChannels() // 获取文章频道
+  }
 }
 </script>
 
