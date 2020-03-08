@@ -65,7 +65,8 @@
     <!-- 右侧显示 -->
     <div class="right">
         <span><i class="el-icon-edit"></i>修改</span>
-        <span><i class="el-icon-delete"></i>删除</span>
+        <!-- 删除文章 绑定事件 需要传入当前 id  id 可能是个大数字 要转成字符串格式的-->
+        <span @click="delArticles(item.id.toString())"><i class="el-icon-delete"></i>删除</span>
     </div>
 </div>
 <!-- 分页组件 -->
@@ -154,6 +155,25 @@ export default {
       // newPage 点击时候的页码
       this.page.currentPage = newPage // 新的页码重新赋值
       this.changeCondition() // 调用带着条件的方法并且把最新页码 作为参数传进去 重新拉取数据 点击页的数据
+    },
+    // 删除文章 (只能删除草稿 不能删除已发表文章 如需删除发表文章 要修改为草稿)
+    delArticles (id) {
+    //  有好的提示一下
+      this.$confirm('您确定要删除吗', '提示').then(() => {
+      // $confirm 支持promiss 用户点击确认 进入then
+        // 调用接口
+        this.$axios({
+          url: `/articles/${id}`, // 接口地址 /articles/:target 文章id
+          method: 'delete' // 类型
+        }).then(() => {
+        // 删除成功 重新拉取数据
+        //  this.getArticles() // 如果这么写 就意味着你 舍去了当前的页码和条件 不能这么写
+          this.changeCondition() // 应该带着条件和页码去重新拉取数据
+          this.$message.success('删除成功')
+        }).catch(() => {
+          this.$message.error('删除失败')
+        })
+      })
     }
 
   },
