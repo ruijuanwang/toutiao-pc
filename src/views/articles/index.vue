@@ -68,6 +68,21 @@
         <span><i class="el-icon-delete"></i>删除</span>
     </div>
 </div>
+<!-- 分页组件 -->
+<!-- :total      总页码
+  :current-page 当前页
+  :page-size    每页放多少条
+   @current-change 页码改变事件
+ -->
+<el-row type="flex" justify="center" align="middle" style="height:80px">
+  <el-pagination background layout="prev, pager, next"
+ @current-change='changeCurrent'
+  :total="page.total"
+  :current-page="page.currentPage"
+  :page-size="page.pageSize"
+  >
+</el-pagination>
+</el-row>
 </el-card>
 </template>
 
@@ -85,8 +100,14 @@ export default {
       },
       channels: [], // 接收频道列表数据
       list: [], // 接收文章内容列表数据
-      defaultImg: require('@/assets/img/login_bg.jpg') // 地址对应的文件变成了变量 编译时会拷贝到对应的位置
+      defaultImg: require('@/assets/img/login_bg.jpg'), // 地址对应的文件变成了变量 编译时会拷贝到对应的位置
+      // 定义一个分页数据对象
+      page: {
+        total: 0, // 总页码
+        currentPage: 1, // 当前页 默认第一页
+        pageSize: 10 // 每页多少条
 
+      }
     }
   },
   methods: {
@@ -109,12 +130,16 @@ export default {
       }).then((result) => {
         // 成功
         this.list = result.data.results // 把接口返回的数据赋值给数组
+        this.page.total = result.data.total_count // 页码
+        this.page.pageSize = result.data.per_page
       })
     },
     // 改变了条件 (做筛选功能)
-    changeCondition () {
+    changeCondition (newPage) {
+      // 当触发此方法的时候 表单数据已经变成最新的了
       // 组装条件 params
       var params = {
+        page: this.page.currentPage, // 如果条件改变就回到第一页
         status: this.searchForm.status === 5 ? null : this.searchForm.status, // 文章状态 5 是我们虚构的
         channel_id: this.searchForm.channel_id ? this.searchForm.channel_id : null, // 频道类型
         begin_pubdate: this.searchForm.dateRange && this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null, // 起始日期先要判断是否有有值
@@ -123,6 +148,12 @@ export default {
       }
       // 发生改变 根据条件调用接口 获取数据
       this.getArticles(params) // 直接传入参数 调用接口
+    },
+    // 切换分页
+    changeCurrent (newPage) {
+      // newPage 点击时候的页码
+      this.page.currentPage = newPage // 新的页码重新赋值
+      this.changeCondition() // 调用带着条件的方法并且把最新页码 作为参数传进去 重新拉取数据 点击页的数据
     }
 
   },
@@ -172,7 +203,8 @@ export default {
     searchForm: {
       deep: true, // 固定写法 深度监听
       handler () { // handler固定写法 监听的数据一旦发生变化 就会执行这个函数
-      // 调用 统一改变条件的方法 调用接口
+        this.page.currentPage = 1 // 当条件改变了(筛选) 页码要重置到第一页
+        // 调用 统一改变条件的方法 调用接口
         this.changeCondition() // this指向组件实例
       }
     }
