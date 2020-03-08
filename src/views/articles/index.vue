@@ -13,7 +13,7 @@
         <!-- 单选框组 -->
         <!-- 文章状态  label是当前v-model绑定的值-->
         <!-- 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，将5定义为全部 -->
-        <el-radio-group v-model="searchForm.status">
+        <el-radio-group @change="changeCondition" v-model="searchForm.status">
               <el-radio :label="5">全部</el-radio>
               <el-radio :label="0">草稿</el-radio>
               <el-radio :label="1">待审核</el-radio>
@@ -22,9 +22,9 @@
         </el-radio-group>
     </el-form-item>
     <!-- 通过频道接口获取数据 -->
-    <el-form-item label="频道列表：">
+    <el-form-item  label="频道列表：">
         <!-- 频道列表 el-select组件-->
-    <el-select v-model="searchForm.channel_id" placeholder="请选择">
+    <el-select @change="changeCondition" v-model="searchForm.channel_id" placeholder="请选择">
         <!-- 循环生成el-option下拉选项 :label是显示值 :value是绑定的当前项-->
     <el-option v-for="item in channels" :label="item.name" :value="item.id" :key="item.id">
  </el-option>
@@ -33,7 +33,8 @@
     <el-form-item label="时间选择：">
         <!-- 时间选择 -->
         <!-- 日期范围选择组件  要设置type属性为 daterange-->
-        <el-date-picker type="daterange" v-model="searchForm.dateRange"></el-date-picker>
+        <!-- 显示值和存储值的结构不一致 使用value-format指定绑定值的格式。 -->
+        <el-date-picker value-format="yyyy-MM-dd" @change="changeCondition" type="daterange" v-model="searchForm.dateRange"></el-date-picker>
     </el-form-item>
 </el-form>
 <!-- 文章主体结构 -->
@@ -94,14 +95,28 @@ export default {
       })
     },
     // 获取内容列表数据 方法
-    getArticles () {
+    getArticles (params) { // 参数 如果不传就是undefined
       // 发送请求
       this.$axios({
-        url: '/articles' // 请求地址
+        url: '/articles', // 请求地址
+        params // 简写
       }).then((result) => {
         // 成功
         this.list = result.data.results // 把接口返回的数据赋值给数组
       })
+    },
+    // 改变了条件 (做筛选功能)
+    changeCondition () {
+      // 组装条件 params
+      var params = {
+        status: this.searchForm.status === 5 ? null : this.searchForm.status, // 文章状态 5 是我们虚构的
+        channel_id: this.searchForm.channel_id ? this.searchForm.channel_id : null, // 频道类型
+        begin_pubdate: this.searchForm.dateRange && this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null, // 起始日期先要判断是否有有值
+        end_pubdate: this.searchForm.dateRange && this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null // 截止日期 是当前数组的第二项
+
+      }
+      // 发生改变 根据条件调用接口 获取数据
+      this.getArticles(params) // 直接传入参数 调用接口
     }
 
   },
