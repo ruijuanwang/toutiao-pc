@@ -38,8 +38,9 @@
 </el-form-item>
 <el-form-item>
     <!-- 两个按钮  -->
-    <el-button @click="publish" type="success">发表</el-button>
-    <el-button type="info">存入草稿</el-button>
+    <!--  false 发布文章 true存入草稿  -->
+    <el-button @click="publish(false)" type="success">发表</el-button>
+    <el-button  @click="publish(true)" type="info">存入草稿</el-button>
 </el-form-item>
 </el-form>
 </el-card>
@@ -83,9 +84,24 @@ export default {
       })
     },
     // 发表按钮方法
-    publish () {
+    publish (draft) {
       // 手动校验 通过this.$refs.myForm获取表单组件实例 调用validate方法
-      this.$refs.myForm.validate()
+      this.$refs.myForm.validate().then(() => {
+        //   表示校验成功  调用发表文章的接口
+        // 存入草稿和发表文章可以调用一个接口 根据draft参数来区分 draft表示是否存入草稿  true存入草稿  false发布文章
+        this.$axios({
+          url: '/articles', // 地址
+          method: 'post',
+          params: { draft }, // query参数(是个对象) es6
+          data: this.publishForm // body传参 表单信息
+        }).then(() => {
+          // 表示发表成功 回内容列表页
+          this.$router.push('/home/articles')
+          this.$message.success('操作成功')
+        }).catch(() => {
+          this.$message.error('操作失败')
+        })
+      })
     }
   },
   created () {
