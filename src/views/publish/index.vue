@@ -102,10 +102,21 @@ export default {
           this.$message.error('操作失败')
         })
       })
+    },
+    //  根据id获取要修改的文章内容 显示页面
+    getArticleById (id) {
+      //   调用接口
+      this.$axios({
+        url: `articles/${id}` // 地址
+      }).then((result) => {
+        this.publishForm = result.data // 赋值到data表单数据中
+      })
     }
   },
   created () {
     this.getChannels() // 获取文章频道
+    const { articleId } = this.$route.params // articleId是 路由参数中定义的
+    this.getArticleById(articleId) // 调用获取 文章详情内容方法
   }
 }
 </script>
