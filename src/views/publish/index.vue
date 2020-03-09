@@ -13,13 +13,13 @@
     <el-input v-model="publishForm.title" style="width:60%" placeholder="请输入标题"></el-input>
 </el-form-item>
 <el-form-item label="内容：" prop="content">
-    <!-- 多行输入 -->
-     <el-input v-model="publishForm.content" type="textarea" :rows="5" style="width:60%"></el-input>
+    <!-- 多行输入  将input换成quill-editor即可-->
+     <quill-editor v-model="publishForm.content" style="width:100%;height:300px"></quill-editor>
 </el-form-item>
 <el-form-item label="封面：" prop="cover">
     <!-- 单选框组 -->
     <!-- 封面单选组 绑定的是 封面cover中的type -->
-    <el-radio-group v-model="publishForm.cover.type">
+    <el-radio-group v-model="publishForm.cover.type" style="margin-top:120px">
         <!-- 给每el-radio加上 :label属性 用来显示type的值 -->
         <!-- 封面类型 -1:自动，0-无图，1-1张，3-3张 -->
         <el-radio :label="1">单图</el-radio>

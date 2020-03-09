@@ -5,6 +5,12 @@
 import LayoutAside from './home/layout-aside'// 侧边栏组件
 import LayoutHeader from './home/layout-header'// 头部组件
 import BreadCrumb from './common/bread-crumb' // 面包屑组件
+import VueQuillEditor from 'vue-quill-editor' // 富文本编辑器
+
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 export default {
   install: function (Vue) {
@@ -12,5 +18,6 @@ export default {
     Vue.component('layout-aside', LayoutAside)// 注册头部组件
     Vue.component('layout-header', LayoutHeader)// 注册左侧导航组件
     Vue.component('bread-crumb', BreadCrumb)// 注册面包屑组件
+    Vue.use(VueQuillEditor)// 注册富文本编辑器
   }
 }
