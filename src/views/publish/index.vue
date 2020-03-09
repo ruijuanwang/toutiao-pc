@@ -84,25 +84,45 @@ export default {
       })
     },
     // 发表按钮方法
+    // 通过有无id 判断当前文章是修改还是发布
     publish (draft) {
       // 手动校验 通过this.$refs.myForm获取表单组件实例 调用validate方法
       this.$refs.myForm.validate().then(() => {
-        //   表示校验成功  调用发表文章的接口
+        const { articleId } = this.$route.params // 如果id 不为空 就是修改 如果为空就是发布新文章
+        if (articleId) {
+        // 调用修改接口
+          this.$axios({
+            url: `/articles/${articleId}`, // 地址
+            method: 'put',
+            params: { draft }, // query参数(是个对象) es6
+            data: this.publishForm // body传参 表单信息
+
+          }).then(() => {
+            // 表示发表成功 回内容列表页
+            this.$router.push('/home/articles')
+            this.$message.success('操作成功')
+          }).catch(() => {
+            this.$message.error('操作失败')
+          })
+        } else {
+          //   表示校验成功  调用发表文章的接口
         // 存入草稿和发表文章可以调用一个接口 根据draft参数来区分 draft表示是否存入草稿  true存入草稿  false发布文章
-        this.$axios({
-          url: '/articles', // 地址
-          method: 'post',
-          params: { draft }, // query参数(是个对象) es6
-          data: this.publishForm // body传参 表单信息
-        }).then(() => {
+          this.$axios({
+            url: '/articles', // 地址
+            method: 'post',
+            params: { draft }, // query参数(是个对象) es6
+            data: this.publishForm // body传参 表单信息
+          }).then(() => {
           // 表示发表成功 回内容列表页
-          this.$router.push('/home/articles')
-          this.$message.success('操作成功')
-        }).catch(() => {
-          this.$message.error('操作失败')
-        })
+            this.$router.push('/home/articles')
+            this.$message.success('操作成功')
+          }).catch(() => {
+            this.$message.error('操作失败')
+          })
+        }
       })
     },
+
     //  根据id获取要修改的文章内容 显示页面
     getArticleById (id) {
       //   调用接口
