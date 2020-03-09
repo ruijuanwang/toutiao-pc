@@ -64,7 +64,11 @@
     </div>
     <!-- 右侧显示 -->
     <div class="right">
-        <span><i class="el-icon-edit"></i>修改</span>
+      <!-- 修改 两种方式 -->
+      <!-- 1.事件绑定方法 -->
+      <!-- <span @click="goPublish"><i class="el-icon-edit"></i>修改</span> -->
+      <!--2:事件直接跟逻辑 点击修改 跳转页面 传递当前id 动态路由传参 去路由规则表-->
+        <span @click="$router.push(`/home/publish/${item.id.toString()}`)"><i class="el-icon-edit"></i>修改</span>
         <!-- 删除文章 绑定事件 需要传入当前 id  id 可能是个大数字 要转成字符串格式的-->
         <span @click="delArticles(item.id.toString())"><i class="el-icon-delete"></i>删除</span>
     </div>

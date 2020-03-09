@@ -33,7 +33,7 @@ const routes = [
       component: () => import('@/views/articles') // 引入组件 按需加载
     },
     {
-      path: 'publish', // 发布文章 简写地址
+      path: 'publish/:articleId?', // 发布文章 简写地址 传递参数因为要修改文章 加？表示不管传不传参数都可以跳到publish页
       component: () => import('@/views/publish') // 引入组件 按需加载
     }
     ]
