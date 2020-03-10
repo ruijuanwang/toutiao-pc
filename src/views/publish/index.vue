@@ -19,7 +19,8 @@
 <el-form-item label="封面：" prop="cover">
     <!-- 单选框组 -->
     <!-- 封面单选组 绑定的是 封面cover中的type -->
-    <el-radio-group v-model="publishForm.cover.type" style="margin-top:120px">
+    <!-- 绑定change事件 监听type变化 来决定images中的长度变化  -->
+    <el-radio-group @change="changeType" v-model="publishForm.cover.type" style="margin-top:120px">
         <!-- 给每el-radio加上 :label属性 用来显示type的值 -->
         <!-- 封面类型 -1:自动，0-无图，1-1张，3-3张 -->
         <el-radio :label="1">单图</el-radio>
@@ -74,6 +75,18 @@ export default {
     }
   },
   methods: {
+    // 改变封面图片类型的事件
+    changeType () {
+    //  封面类型 -1:自动，0-无图，1-1张，3-3张
+    // 应该根据type值的变化 来控制images进行控制
+      if (this.publishForm.type === 1) {
+        this.publishForm.images = [''] // 此时还没有选择图片 所以给1个空字符串
+      } else if (this.publishForm.type === 3) {
+        this.publishForm.images = ['', '', ''] // 此时还没有选择图片 所以给3个空字符串
+      } else {
+        this.publishForm.images = [] // 无图或者自动式 给一个空数组
+      }
+    },
     // 获取文章频道 方法
     getChannels () {
       // 调用接口
