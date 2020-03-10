@@ -31,7 +31,8 @@
 </el-form-item>
     <!-- 封面图片组件 -->
     <!-- 把封面图片传给子组件 -->
-    <cover-image :list="publishForm.cover.images"></cover-image>
+    <!-- 监听谁的自定义事件 就在谁的标签上写v-on/@  -->
+    <cover-image @selectTwoImage='receiveImg' :list="publishForm.cover.images"></cover-image>
 <el-form-item label="频道：" prop="channel_id">
     <!-- 下拉菜单 用 select选择器 -->
     <!-- v-model的值为当前被选中的el-option的 value 属性值 -->
@@ -78,6 +79,16 @@ export default {
     }
   },
   methods: {
+    // 接收cover-image传过来的参数=>选择的图片地址 和当前点击图片的索引
+    receiveImg (url, index) {
+      // 接收到了传递过来的封面数据
+      // 接下来应该更新到images数组中
+      // 但是仅仅拿到了地址是不够的 images数组可能有1条 可能能有三条 我们要知道更新哪一条
+      // 有索引 有url就可以更新数据了
+      // splice(索引,要删除的个数,替换的个数)
+      this.publishForm.cover.images.splice(index, 1, url) // 删除替换元素
+      // 图片选择完毕之后 我们需要去弹层组件 把弹层关闭
+    },
     // 改变封面图片类型的事件
     changeType () {
     //  封面类型 -1:自动，0-无图，1-1张，3-3张

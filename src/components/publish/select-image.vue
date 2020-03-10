@@ -9,7 +9,7 @@
             <!-- 循环生成每一项 图片素材 用 el-card组件来包裹 -->
             <el-card v-for="item in list" :key="item.id" class="img-card">
                 <!-- 显示图片素材 -->
-                <img :src="item.url" alt="">
+                <img :src="item.url" @click="clickImg(item.url)" alt="">
             </el-card>
         </div>
         <!-- 页码组件  el-row用来布局-->
@@ -24,7 +24,10 @@
             </el-pagination>
         </el-row>
     </el-tab-pane>
-    <el-tab-pane label="上传素材" name="upload"></el-tab-pane>
+    <!-- 上传素材图片 -->
+    <el-tab-pane label="上传素材" name="upload">
+
+    </el-tab-pane>
   </el-tabs>
 
 </template>
@@ -45,6 +48,12 @@ export default {
     }
   },
   methods: {
+    // 点击图片时触发
+    clickImg (url) {
+    //  触发自定义事件  需要将url传递给上层父组件
+    // 脚手架中的自定义事件名 大小写通用 不用纯小写
+      this.$emit('selectOneImage', url)
+    },
     //   获取图片素材的方法
     getMaterial () {
       //   调用获取用户图片素材接口
@@ -85,9 +94,9 @@ export default {
         img{
             width: 100%;
             height: 100%;
+            cursor: pointer;
         }
     }
 
 }
-
 </style>
