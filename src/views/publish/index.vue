@@ -180,6 +180,38 @@ export default {
     this.getChannels() // 获取文章频道
     const { articleId } = this.$route.params // articleId是 路由参数中定义的
     articleId && this.getArticleById(articleId) // && 运算符 前面为true 后面才执行 调用获取 文章详情内容方法
+  },
+  watch: {
+    // 如果想要捕捉路由参数的变化 我们可以采用watch来监听 $route
+    // watch是监听data中的数据变化的
+    // 路由初始化之后 会把 $route也放置在 页面data中
+    $route: function (to, from) {
+      // to:表示新的路由地址对象
+      // from：表示就得路由地址对象
+      console.log(to)
+      // 根据to属性的params的articleId来决定 是不是要改变数据
+      // 如果有articleId 应该获取编辑文章对应id的数据
+      // 如果没有articleId 应该将表单数据设置为空
+
+      if (to.params.articleId) {
+        // 如果id存在 应该获取文章数据
+        this.getArticleById(to.params.articleId) // 获取对应id数据
+      } else {
+        // 如果不存在 表单数据设置为空
+        // 如果是发布文章 就设置为空对象 为默认值 不是null
+        this.publishForm = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          // 文章封面
+          cover: {
+            type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+            images: [] // 字符串的数组 对用type  如果type为 1 images中应该有1个值-type为 3 images中应该有3个值 0为空
+          },
+          channel_id: null // 频道id
+
+        }
+      }
+    }
   }
 }
 </script>
