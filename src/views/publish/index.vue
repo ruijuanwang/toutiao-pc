@@ -29,6 +29,9 @@
         <el-radio :label="-1">自动</el-radio>
     </el-radio-group>
 </el-form-item>
+    <!-- 封面图片组件 -->
+    <!-- 把封面图片传给子组件 -->
+    <cover-image :list="publishForm.cover.images"></cover-image>
 <el-form-item label="频道：" prop="channel_id">
     <!-- 下拉菜单 用 select选择器 -->
     <!-- v-model的值为当前被选中的el-option的 value 属性值 -->
@@ -79,12 +82,12 @@ export default {
     changeType () {
     //  封面类型 -1:自动，0-无图，1-1张，3-3张
     // 应该根据type值的变化 来控制images进行控制
-      if (this.publishForm.type === 1) {
-        this.publishForm.images = [''] // 此时还没有选择图片 所以给1个空字符串
-      } else if (this.publishForm.type === 3) {
-        this.publishForm.images = ['', '', ''] // 此时还没有选择图片 所以给3个空字符串
+      if (this.publishForm.cover.type === 1) {
+        this.publishForm.cover.images = [''] // 此时还没有选择图片 所以给1个空字符串
+      } else if (this.publishForm.cover.type === 3) {
+        this.publishForm.cover.images = ['', '', ''] // 此时还没有选择图片 所以给3个空字符串
       } else {
-        this.publishForm.images = [] // 无图或者自动式 给一个空数组
+        this.publishForm.cover.images = [] // 无图或者自动式 给一个空数组
       }
     },
     // 获取文章频道 方法

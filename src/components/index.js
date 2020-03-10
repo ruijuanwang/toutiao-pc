@@ -6,6 +6,7 @@ import LayoutAside from './home/layout-aside'// 侧边栏组件
 import LayoutHeader from './home/layout-header'// 头部组件
 import BreadCrumb from './common/bread-crumb' // 面包屑组件
 import VueQuillEditor from 'vue-quill-editor' // 富文本编辑器
+import CoverImage from './publish/cover-image' // 封面图片组件
 
 // require styles
 import 'quill/dist/quill.core.css'
@@ -19,5 +20,6 @@ export default {
     Vue.component('layout-header', LayoutHeader)// 注册左侧导航组件
     Vue.component('bread-crumb', BreadCrumb)// 注册面包屑组件
     Vue.use(VueQuillEditor)// 注册富文本编辑器
+    Vue.component('cover-image', CoverImage) // 注册封面图片组件
   }
 }
