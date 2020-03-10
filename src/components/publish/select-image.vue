@@ -12,9 +12,21 @@
                 <img :src="item.url" alt="">
             </el-card>
         </div>
+        <!-- 页码组件  el-row用来布局-->
+        <el-row type="flex" justify="center">
+            <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="page.total"
+                :current-page="page.currentPage"
+                :page-size="page.pageSize"
+                @current-change='changePage'>
+            </el-pagination>
+        </el-row>
     </el-tab-pane>
-    <el-tab-pane label="上传素材" name="uploadMaterial"></el-tab-pane>
+    <el-tab-pane label="上传素材" name="upload"></el-tab-pane>
   </el-tabs>
+
 </template>
 
 <script>
@@ -22,7 +34,14 @@ export default {
   data () {
     return {
       activeName: 'material', // 被激活的页签 默认是素材库
-      list: []// 用来接收图片素材数据
+      list: [], // 用来接收图片素材数据
+      //   分页数据对象
+      page: {
+        total: 0, // 总页码
+        currentPage: 1, // 当前页
+        pageSize: 8 // 一页放多少
+
+      }
     }
   },
   methods: {
@@ -32,11 +51,19 @@ export default {
       this.$axios({
         url: '/user/images', // 地址
         params: {
-          collect: false // 是否是收藏图片 这里要全部图片
+          collect: false, // 是否是收藏图片 这里要全部图片
+          page: this.page.currentPage, // 当前页码
+          per_page: this.page.pageSize // 每页多少条
         }
       }).then(result => {
         this.list = result.data.results // 将全部素材数据 赋值给data中的变量
+        this.page.total = result.data.total_count // 总页码赋值给页码变量
       })
+    },
+    // 改变页码
+    changePage (newPage) {
+      this.page.currentPage = newPage // 最新页码赋值给data变量
+      this.getMaterial() // 重新获取 数据
     }
   },
   created () {
