@@ -6,7 +6,10 @@
       <!--item如果没有值 就显示默认图片 img如果不是固定地址的话 图片应该先转化成变量 -->
         <img @click="openDialog" :src="item ? item : defaultImg" alt="">
         <!-- 注册点击事件 点击弹出一个层 -->
-        <el-dialog :visible="dialogVisible" @close="dialogVisible=false"></el-dialog>
+        <el-dialog :visible="dialogVisible" @close="dialogVisible=false">
+          <!-- 再次封装一个组件  选择图片的组件 -->
+          <select-image></select-image>
+        </el-dialog>
     </div>
   </div>
 </template>
@@ -22,6 +25,7 @@ export default {
     }
   },
   methods: {
+    // 点击图片是弹出一个层
     openDialog () {
       this.dialogVisible = true
     }
