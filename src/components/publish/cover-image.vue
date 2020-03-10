@@ -4,7 +4,9 @@
      <div v-for="(item,index) in list" :key="index" class="cover-image-item">
       <!-- 图片的地址就是item 刚开始item是空的 因为此时还没有选择图片 这时应该根据item是否有值来决定显示的图片是item还是默认图片 -->
       <!--item如果没有值 就显示默认图片 img如果不是固定地址的话 图片应该先转化成变量 -->
-        <img :src="item ? item : defaultImg" alt="">
+        <img @click="openDialog" :src="item ? item : defaultImg" alt="">
+        <!-- 注册点击事件 点击弹出一个层 -->
+        <el-dialog :visible="dialogVisible" @close="dialogVisible=false"></el-dialog>
     </div>
   </div>
 </template>
@@ -15,7 +17,13 @@ export default {
   props: ['list'], // 用数组来接收传递的参数
   data () {
     return {
-      defaultImg: require('../../assets/img/pic_bg.png') // 默认图片 要转换成变量
+      defaultImg: require('../../assets/img/pic_bg.png'), // 默认图片 要转换成变量
+      dialogVisible: false // 弹层 默认隐藏
+    }
+  },
+  methods: {
+    openDialog () {
+      this.dialogVisible = true
     }
   }
 }
@@ -34,6 +42,7 @@ export default {
         img{
           width:100%;
           height:100%;
+          cursor: pointer;
         }
   }
 }
