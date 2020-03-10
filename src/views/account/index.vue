@@ -12,7 +12,7 @@
             <el-input v-model="formData.name" style="width:30%"></el-input>
         </el-form-item>
         <el-form-item label='简介：'>
-            <el-input  v-model="formData.intro" style="width:30%" type="textarea" :rows="3"></el-input>
+            <el-input  v-model="formData.intro" style="width:30%" type="textarea"  :rows="3"></el-input>
         </el-form-item>
         <el-form-item prop="email" label='邮箱：'>
             <el-input  v-model="formData.email" style="width:30%"></el-input>
