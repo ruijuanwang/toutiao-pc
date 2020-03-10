@@ -6,7 +6,7 @@
      <template slot="title"> 账户信息</template>
       </bread-crumb>
       <!-- 表单容器 -->
-      <el-form :model="formData" :rules="rules" label-width="100px">
+      <el-form ref="myForm" :model="formData" :rules="rules" label-width="100px">
           <!-- 表单域 -->
         <el-form-item prop="name" label='用户名：'>
             <el-input v-model="formData.name" style="width:30%"></el-input>
@@ -23,7 +23,7 @@
         </el-form-item>
          <el-form-item>
              <!-- 保存按钮 -->
-         <el-button type='primary'>保存</el-button>
+         <el-button @click="saveUser" type='primary'>保存</el-button>
        </el-form-item>
       </el-form>
       <!-- 头像 -->
@@ -67,7 +67,26 @@ export default {
         //   成功
         this.formData = result.data // 赋值给表单对象数据
       })
+    },
+    // 保存用户信息 手动校验
+    saveUser () {
+    //    获取表单组件对象 调用validate()手动检验方法
+      this.$refs.myForm.validate().then(() => {
+        // 进入then 说明校验成功
+        // 调用接口
+        this.$axios({
+          url: '/user/profile', // 地址
+          method: 'patch', // 类型
+          data: this.formData
+        }).then(result => {
+          // 修改成功
+          this.$message.success('保存用户信息成功')
+        }).catch(() => {
+          this.$message.error('保存用户信息失败')
+        })
+      })
     }
+
   },
   created () {
     this.getUserInfo() // 获取用户信息
