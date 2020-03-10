@@ -26,7 +26,12 @@
     </el-tab-pane>
     <!-- 上传素材图片 -->
     <el-tab-pane label="上传素材" name="upload">
-
+        <!-- 上传组件 action必须写 不然报错  :show-file-list 是否显示上传文件地址-->
+        <!-- :http-request 覆盖默认的上传行为，可以自定义上传的实现 -->
+        <el-upload :http-request="uploadImg" action="" class="upload-img" :show-file-list="false">
+            <i class="el-icon-plus">
+            </i>
+        </el-upload>
     </el-tab-pane>
   </el-tabs>
 
@@ -45,9 +50,29 @@ export default {
         pageSize: 8 // 一页放多少
 
       }
+
     }
   },
   methods: {
+    //   自定义函数
+    uploadImg (params) {
+      // 接收一个参数 当前图片信息
+      // 调用上传素材接口 接口的参数类型要求是formdata类型
+      // params.file 就是要上传的图片文件
+      var data = new FormData() // 实例化一个formdata
+      data.append('image', params.file) // 加入文件参数
+      this.$axios({
+        url: '/user/images', // 地址
+        method: 'post', // 类型
+        data // body参数 es6
+      }).then(result => {
+        //  如果上传成功了 接口会返回一个上传成功之后的图片地址
+        // 拿到了返回的url地址 我们应该再次把 url传给父组件
+        this.$emit('selectOneImage', result.data.url) // 将url传出去
+      }).catch(() => {
+        this.$message.error('上传素材失败')
+      })
+    },
     // 点击图片时触发
     clickImg (url) {
     //  触发自定义事件  需要将url传递给上层父组件
@@ -83,7 +108,8 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.select-image-list{
+
+    .select-image-list{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -99,4 +125,17 @@ export default {
     }
 
 }
+    .upload-img{
+        display: flex;
+        justify-content: center;
+        height:400px;
+        i{
+            font-size: 20px;
+        padding: 50px;
+        border:2px dashed #ccc;
+        border-radius: 4px;
+
+        }
+    }
+
 </style>
