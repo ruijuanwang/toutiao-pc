@@ -12,7 +12,7 @@
             <el-input v-model="formData.name" style="width:30%"></el-input>
         </el-form-item>
         <el-form-item label='简介：'>
-            <el-input  v-model="formData.intro" style="width:30%" type="textear" :rows="3"></el-input>
+            <el-input  v-model="formData.intro" style="width:30%" type="textarea" :rows="3"></el-input>
         </el-form-item>
         <el-form-item prop="email" label='邮箱：'>
             <el-input  v-model="formData.email" style="width:30%"></el-input>
@@ -27,9 +27,11 @@
        </el-form-item>
       </el-form>
       <!-- 头像 -->
-      <div  class="head-upload">
-          <img :src="formData.photo? formData.photo : defaultImg" alt="">
-      </div>
+        <!-- show-file-list为false  不显示上传的文件列表 -->
+     <el-upload action="" :http-request="uploadImg" :show-file-list="false" class='head-upload'>
+            <img :src="formData.photo? formData.photo : defaultImg" alt="">
+     </el-upload>
+
   </el-card>
 </template>
 
@@ -84,6 +86,24 @@ export default {
         }).catch(() => {
           this.$message.error('保存用户信息失败')
         })
+      })
+    },
+    // 点击上传头像
+    uploadImg (params) {
+      // params.file 上传的文件地址
+    //   调用接口 formdata类型
+      var data = new FormData()
+      data.append('photo', params.file)
+      this.$axios({
+        url: '/user/photo', // 地址
+        method: 'patch',
+        data // es6写法
+
+      }).then((result) => {
+        this.formData.photo = result.data.photo // 接口返回的图片新地址 赋值给photo变量
+        this.$message.success('用户头像上传成功')
+      }).catch(() => {
+        this.$message.error('用户头像上传失败')
       })
     }
 
