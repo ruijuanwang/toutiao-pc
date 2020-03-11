@@ -9,12 +9,15 @@
          <i class="el-icon-s-fold"></i>
         <span> 更多新闻关注今日头条</span>
      </el-col>
+     <!-- 音频标签 -->
+  <audio style="width:260px;height:40px;margin:10px" src='../../assets/img/music.mp3' loop='loop' controls='cotrols'  autoplay='autoplay'></audio>
+
      <!-- 右侧 -->
      <el-col :span="12" class="right">
          <!-- 再放一个el-row组件 type="flex" 开启flex布局 justify 设置对齐样式 align属性设置垂直对齐方式-->
         <el-row type="flex" justify="end" align="middle">
             <!-- 头像图片 -->
-            <img :src='userInfo.photo'>
+           <img :src="userInfo.photo" alt="">
             <!-- 下拉菜单  用el-dropdown 标签组件  trigger属性：触发下拉的行为 click或hover-->
             <!-- 点击菜单会触发clickMenu事件 -->
             <el-dropdown @command="clickMenu" trigger='click' :hide-on-click="false">
@@ -30,11 +33,13 @@
 
         </el-row>
      </el-col>
+
 </el-row>
 
 </template>
 
 <script>
+import eventBus from '@/utils/eventBus' // 公共领域监听
 export default {
   data () {
     return {
@@ -53,15 +58,24 @@ export default {
         window.localStorage.removeItem('user-token')
         this.$router.push('/login')// 编程式导航 跳回登录页
       }
+    },
+    // 获取用户信息
+    getUserInfo () {
+      this.$axios({
+        url: '/user/profile' // 请求地址
+      }).then(result => {
+        //   console.log(result.data)
+        // 加载成功 把数据赋值给userInfo
+        this.userInfo = result.data
+      })
     }
   },
   created () {
-    this.$axios({
-      url: '/user/profile' // 请求地址
-    }).then(result => {
-    //   console.log(result.data)
-    // 加载成功 把数据赋值给userInfo
-      this.userInfo = result.data
+    this.getUserInfo() // 页面初始化 获取数据 正常加载
+    // 触发监听事件
+    eventBus.$on('updateUser', () => {
+      // updateUser 这个事件  就会执行回调函数  (修改用户个人信息 点击保存的时候就会出发这个事件 还有头像)
+      this.getUserInfo() // 重新获取用户信息
     })
   }
 }

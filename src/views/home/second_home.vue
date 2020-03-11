@@ -10,7 +10,7 @@
   <!-- 视频标签 -->
   <video class="girl" autoplay='autoplay'  src="../../assets/img/girl.mp4" loop='loop' muted='muted' > </video>
   <!-- 音频标签 -->
-  <audio style="width:250px;height:30px;margin:10px" src='../../assets/img/music.mp3' loop='loop' controls='cotrols'  autoplay='autoplay'></audio>
+  <!-- <audio style="width:250px;height:30px;margin:10px" src='../../assets/img/music.mp3' loop='loop' controls='cotrols'  autoplay='autoplay'></audio> -->
 <!-- 日历 -->
 <el-calendar class="time">
 </el-calendar>

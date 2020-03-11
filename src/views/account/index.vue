@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import eventBus from '@/utils/eventBus' // 公共领域监听
 export default {
   data () {
     return {
@@ -81,8 +82,10 @@ export default {
           method: 'patch', // 类型
           data: this.formData
         }).then(result => {
-          // 修改成功
           this.$message.success('保存用户信息成功')
+          // 修改成功
+          // 广播一个消息 updateUser 触发事件
+          eventBus.$emit('updateUser')
         }).catch(() => {
           this.$message.error('保存用户信息失败')
         })
@@ -102,6 +105,8 @@ export default {
       }).then((result) => {
         this.formData.photo = result.data.photo // 接口返回的图片新地址 赋值给photo变量
         this.$message.success('用户头像上传成功')
+        // 广播消息 触发事件
+        eventBus.$emit('updateUser') // 头部用户信息更新了
       }).catch(() => {
         this.$message.error('用户头像上传失败')
       })
