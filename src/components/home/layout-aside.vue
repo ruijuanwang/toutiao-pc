@@ -2,12 +2,14 @@
 <!-- 左侧导航组件 -->
 <div class="layout-aside">
     <!-- 1.头部图片logo -->
-    <div class="title">
+    <!-- 图片根据 通过父组件传递过来的变量来决定图片显示还是隐藏 -->
+    <div class="title" v-show="!collapse">
         <img src="../../assets/img/login_logo.png" alt="">
     </div>
     <!--2.导航菜单容器 el-menu  -->
       <!-- 开启路由导航 router="true"(完整模式) router(简写模式)-->
-    <el-menu router background-color="#323745" text-color="#adafb5">
+      <!-- collapse 导航折叠 -->
+    <el-menu :collapse='collapse' router background-color="#323745" text-color="#adafb5">
 
          <!--3. 子菜单无下拉的子菜单 用el-menu-item标签组件  -->
         <el-menu-item index='/home'>
@@ -53,8 +55,9 @@
 </template>
 
 <script>
-export default {
 
+export default {
+  props: ['collapse'] // 接收父组件传来的变量
 }
 </script>
 

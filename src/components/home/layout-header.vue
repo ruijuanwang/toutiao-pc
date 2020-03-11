@@ -5,8 +5,11 @@
   <el-row class="layout-header" type="flex" align="middle">
       <!-- 左侧 -->
      <el-col :span="12" class="left">
-         <!-- 字体图标 -->
-         <i class="el-icon-s-fold"></i>
+         <!-- 字体图标  第一个箭头向左 还没折叠-->
+         <!-- class为动态图标 -->
+         <!-- ：class="{ class名称:布尔值,class名称:布尔值 }" -->
+         <i @click="collapse=!collapse" :class="{'el-icon-s-fold':!collapse,'el-icon-s-unfold':collapse}"></i>
+
         <span> 更多新闻关注今日头条</span>
      </el-col>
      <!-- 音频标签 -->
@@ -43,7 +46,8 @@ import eventBus from '@/utils/eventBus' // 公共领域监听
 export default {
   data () {
     return {
-      userInfo: {} // 用户个人信息
+      userInfo: {}, // 用户个人信息
+      collapse: false // 开始不是折叠的
     }
   },
   methods: {
@@ -69,6 +73,7 @@ export default {
         this.userInfo = result.data
       })
     }
+
   },
   created () {
     this.getUserInfo() // 页面初始化 获取数据 正常加载
@@ -77,6 +82,13 @@ export default {
       // updateUser 这个事件  就会执行回调函数  (修改用户个人信息 点击保存的时候就会出发这个事件 还有头像)
       this.getUserInfo() // 重新获取用户信息
     })
+  },
+  watch: {
+    // 监听data中的数据变化
+    collapse () {
+      // 此时说明 折叠状态变了 通知左侧导航组件
+      eventBus.$emit('changeCollapse') // 触发一个改变折叠状态的事件
+    }
   }
 }
 </script>

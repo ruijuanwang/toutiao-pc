@@ -3,9 +3,11 @@
 <!-- 最外层放置一个大容器 el-container组件-->
 <el-container>
     <!-- el-aside侧边栏容器 -->
-    <el-aside style="width:230px; background-color:#2e2f32">
+    <!-- 根据折叠状态变成64px -->
+    <el-aside :style="{width:collapse ? '64px':  '230px'}" style="background-color:#2e2f32; transition:all 0.5s">
         <!-- 左侧导航组件 -->
-     <layout-aside></layout-aside>
+        <!-- 把父组件的状态传给子组件 -->
+     <layout-aside :collapse='collapse'></layout-aside>
     </el-aside>
     <!-- 右边在嵌套一个外层的大容器 -->
     <el-container>
@@ -25,8 +27,19 @@
 </template>
 
 <script>
-
+import eventBus from '@/utils/eventBus'
 export default {
+  data () {
+    return {
+      collapse: false // 默认是展开状态
+    }
+  },
+  created () {
+    eventBus.$on('changeCollapse', () => {
+      // 此时表示 状态一定变了 跟之前状态相反
+      this.collapse = !this.collapse // 只要取反 就和头部组件的状态对上
+    })
+  }
 
 }
 </script>
