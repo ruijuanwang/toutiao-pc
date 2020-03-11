@@ -8,6 +8,7 @@
     <!--2.导航菜单容器 el-menu  -->
       <!-- 开启路由导航 router="true"(完整模式) router(简写模式)-->
     <el-menu router background-color="#323745" text-color="#adafb5">
+
          <!--3. 子菜单无下拉的子菜单 用el-menu-item标签组件  -->
         <el-menu-item index='/home'>
             <i class="el-icon-s-home"></i>

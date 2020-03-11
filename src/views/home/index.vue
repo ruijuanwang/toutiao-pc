@@ -10,7 +10,7 @@
     <!-- 右边在嵌套一个外层的大容器 -->
     <el-container>
         <!-- 再上下布局 -->
-        <el-header>
+        <el-header style="background:rgba(214,207,214,.2)">
             <!-- 头部组件 -->
             <layout-header></layout-header>
         </el-header>
