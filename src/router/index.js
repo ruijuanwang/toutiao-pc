@@ -43,6 +43,10 @@ const routes = [
     {
       path: 'account', // 账户信息 简写地址
       component: () => import('@/views/account') // 引入组件 按需加载
+    },
+    {
+      path: 'picture', // 粉丝列表 图文数据
+      component: () => import('@/views/picture-echart') // 引入组件
     }
     ]
   },
