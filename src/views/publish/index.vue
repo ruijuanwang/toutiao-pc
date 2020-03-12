@@ -188,7 +188,7 @@ export default {
     $route: function (to, from) {
       // to:表示新的路由地址对象
       // from：表示就得路由地址对象
-      console.log(to)
+      // console.log(to)
       // 根据to属性的params的articleId来决定 是不是要改变数据
       // 如果有articleId 应该获取编辑文章对应id的数据
       // 如果没有articleId 应该将表单数据设置为空
